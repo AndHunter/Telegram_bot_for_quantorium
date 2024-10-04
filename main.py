@@ -1,6 +1,6 @@
-from command import first_cmd, help_cmd
+from command import first_cmd, help_cmd, handler_command
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 import asyncio
 import logging
@@ -16,6 +16,7 @@ async def stop_bot(bot: Bot):
     await bot.send_message(5867884661, text='Бот остановлен')
 
 
+
 async def start():
     logging.basicConfig(level=logging.INFO,
                          format="%(asctime)s - %(levelname)s - %(funcName)s: %(lineno)d - %(message)s")
@@ -23,9 +24,11 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
+    dp.message.register(handler_command)
     dp.message.register(first_cmd, Command(commands='start'))
-    dp.message.register(first_cmd, Command(commands='help'))
-    
+    dp.message.register(help_cmd, Command(commands='help'))
+
+
     try:
         await dp.start_polling(bot)
     finally:
