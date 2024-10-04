@@ -33,3 +33,32 @@ keyboard_help = types.ReplyKeyboardMarkup(
     resize_keyboard=True,
     input_field_placeholder=f"Просто нажми на кнопку"
 )
+
+kb_free_courses = [
+    [
+    types.KeyboardButton(text="Все кванториумы"),
+    types.KeyboardButton(text="Как попасть"),
+    types.KeyboardButton(text="Назад")
+     ]
+
+]
+keyboard_free_courses = types.ReplyKeyboardMarkup(
+    keyboard=kb_help,
+    resize_keyboard=True,
+    input_field_placeholder=f"Просто нажми на кнопку"
+)
+
+kb_how_to_get = [
+    [
+    types.KeyboardButton(text="Все кванториумы"),
+    types.KeyboardButton(text="Информация"),
+    types.KeyboardButton(text="Назад")
+     ]
+
+]
+keyboard_how_to_get = types.ReplyKeyboardMarkup(
+    keyboard=kb_help,
+    resize_keyboard=True,
+    input_field_placeholder=f"Просто нажми на кнопку"
+)
+

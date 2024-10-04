@@ -24,9 +24,10 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
-    dp.message.register(handler_command)
     dp.message.register(first_cmd, Command(commands='start'))
-    dp.message.register(help_cmd, Command(commands='help'))
+    dp.message.register(help_cmd, Command(commands='info'))
+    dp.message.register(handler_command)
+
 
 
     try:
