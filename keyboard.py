@@ -3,7 +3,8 @@ from aiogram.types import ReplyKeyboardRemove, \
     InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-# TODO доделать функционал клавиатуры
+
+#TODO доделать функционал клавиатуры
 kb_start = [
     [KeyboardButton(text="Бесплатные курсы"), KeyboardButton(text="Платные курсы")],
     [KeyboardButton(text="Информация"), KeyboardButton(text="Выдача сертификатов")],
@@ -86,3 +87,15 @@ quantum_keyboard = InlineKeyboardMarkup(row_width=2, inline_keyboard=[
     [button_vr_ar, button_design],
     [button_robot]
 ])
+
+kb_paid_courses = [
+    [KeyboardButton(text="Все кванториумы"), KeyboardButton(text="Записаться на курс")],
+    [KeyboardButton(text="Информация"), KeyboardButton(text="Назад")],
+    [KeyboardButton(text="Поддержка")]
+]
+
+keyboard_paid_courses = types.ReplyKeyboardMarkup(
+    keyboard=kb_paid_courses,
+    resize_keyboard=True,
+    input_field_placeholder="Просто нажми на кнопку"
+)

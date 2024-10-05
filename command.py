@@ -6,7 +6,8 @@ from keyboard import (
     keyboard_free_courses,
     keyboard_how_to_get,
     quantum_keyboard,
-    keyboard_record
+    keyboard_record,
+    keyboard_paid_courses
 )
 from main import ADMIN_ID
 
@@ -51,7 +52,7 @@ async def admin_reply(message: Message):
 async def first_cmd(message: Message):
     """Отправляет приветственное сообщение пользователю."""
     await message.answer(
-        'Здравствуйте, вас приветствует помощник по учебному заведению "Кванториум Фотоника".',
+        'Здравствуйте, вас приветствует помощник по учебному заведению "Кванториум Фотоника", выберите пожалуйста действие на клавиатуре.',
         reply_markup=keyboard_start
     )
 
@@ -116,7 +117,13 @@ async def record_cmd(message: Message):
             reply_markup=keyboard_record
         )
 
-
+async def paid_courses_cmd(message: Message):
+    """Отправляет сообщение о платных курсах."""
+    await message.answer(
+        """Вы выбрали платные курсы,
+выберите пожалуйста действие на клавиатуре.""",
+        reply_markup=keyboard_paid_courses
+    )
 async def handler_command(message: Message):
     """Обрабатывает команды и пересылает сообщения пользователям и администратору."""
     if message.reply_to_message is not None:
@@ -135,6 +142,8 @@ async def handler_command(message: Message):
         await first_cmd(message)
     elif message.text.lower() == "бесплатные курсы":
         await free_courses_cmd(message)
+    elif message.text.lower() == "платные курсы":
+        await paid_courses_cmd(message)
     elif message.text.lower() == "как попасть":
         await how_to_get_cmd(message)
     elif message.text.lower() == "все кванториумы":
@@ -143,4 +152,3 @@ async def handler_command(message: Message):
         await record_cmd(message)
     else:
         await message.answer("Неизвестная команда. Пожалуйста, попробуйте снова.")
-
