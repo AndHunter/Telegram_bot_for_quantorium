@@ -10,6 +10,8 @@ from keyboard import (
     keyboard_paid_courses
 )
 from main import ADMIN_ID
+from certificates_cmd import get_certificates_cmd
+from aiogram.fsm.context import FSMContext
 
 # TODO вынести константы в отдельный файл .env
 LINK_SITE, TEXT_SITE  = 'https://kvantorium-perm.ru/', "сайте"
@@ -32,7 +34,7 @@ async def forward_to_admin(message: Message):
         await message.answer("Ваш вопрос отправлен администратору.")
         await message.bot.send_message(
             ADMIN_ID,
-            f"Вопрос от {message.from_user.username} ({message.from_user.id}):\n{message.text}"
+            f"Вопрос от @{message.from_user.username} ({message.from_user.id}):\n{message.text}"
         )
     else:
         await first_cmd(message)
@@ -124,7 +126,7 @@ async def paid_courses_cmd(message: Message):
 выберите пожалуйста действие на клавиатуре.""",
         reply_markup=keyboard_paid_courses
     )
-async def handler_command(message: Message):
+async def handler_command(message: Message, state: FSMContext):
     """Обрабатывает команды и пересылает сообщения пользователям и администратору."""
     if message.reply_to_message is not None:
         if message.chat.id == ADMIN_ID:
@@ -150,5 +152,7 @@ async def handler_command(message: Message):
         await all_quantuams_cmd(message)
     elif message.text.lower() == "записаться на курс":
         await record_cmd(message)
+    elif message.text.lower() == "выдача сертификатов":
+        await get_certificates_cmd(message, state)
     else:
         await message.answer("Неизвестная команда. Пожалуйста, попробуйте снова.")
