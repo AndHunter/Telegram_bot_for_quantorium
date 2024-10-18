@@ -4,13 +4,12 @@ from aiogram.types import ReplyKeyboardRemove, \
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-#TODO доделать функционал клавиатуры
+# TODO доделать функционал клавиатуры
 kb_start = [
     [KeyboardButton(text="Бесплатные курсы"), KeyboardButton(text="Платные курсы")],
     [KeyboardButton(text="Информация"), KeyboardButton(text="Выдача сертификатов")],
     [KeyboardButton(text="Поддержка")]
 ]
-
 
 keyboard_start = types.ReplyKeyboardMarkup(
     keyboard=kb_start,
@@ -31,11 +30,11 @@ keyboard_help = types.ReplyKeyboardMarkup(
 )
 kb_free_courses = [
     [
-    types.KeyboardButton(text="Все кванториумы"),
-    types.KeyboardButton(text="Как попасть"),
-    types.KeyboardButton(text="Назад"),
-    types.KeyboardButton(text="Поддержка")
-     ]
+        types.KeyboardButton(text="Все кванториумы"),
+        types.KeyboardButton(text="Как попасть"),
+        types.KeyboardButton(text="Назад"),
+        types.KeyboardButton(text="Поддержка")
+    ]
 
 ]
 keyboard_free_courses = types.ReplyKeyboardMarkup(
@@ -76,7 +75,8 @@ button_nano = InlineKeyboardButton(text="Наноквантум", url="https://k
 button_hightech = InlineKeyboardButton(text="Хайтек", url="https://kvantorium-perm.ru/quantum/hightech/")
 button_photonics = InlineKeyboardButton(text="Фотоника", url="https://kvantorium-perm.ru/quantum/photonics/")
 button_vr_ar = InlineKeyboardButton(text="VR / AR", url="https://kvantorium-perm.ru/quantum/vr/")
-button_design = InlineKeyboardButton(text="Промышленный дизайн", url="https://kvantorium-perm.ru/quantum/promodesign/   ")
+button_design = InlineKeyboardButton(text="Промышленный дизайн",
+                                     url="https://kvantorium-perm.ru/quantum/promodesign/   ")
 button_robot = InlineKeyboardButton(text="Промробоквантум", url="https://kvantorium-perm.ru/quantum/robo/")
 
 quantum_keyboard = InlineKeyboardMarkup(row_width=2, inline_keyboard=[

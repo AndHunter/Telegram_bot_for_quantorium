@@ -10,13 +10,15 @@ from keyboard import (
     keyboard_paid_courses
 )
 from main import ADMIN_ID
-from certificates_cmd import get_certificates_cmd
+from certificates_cmd import get_certificates_cmd, process_name
 from aiogram.fsm.context import FSMContext
 
+from states import CertificateStates
+
 # TODO вынести константы в отдельный файл .env
-LINK_SITE, TEXT_SITE  = 'https://kvantorium-perm.ru/', "сайте"
+LINK_SITE, TEXT_SITE = 'https://kvantorium-perm.ru/', "сайте"
 LINK_VK, TEXT_VK = 'https://vk.com/kvantorium.fotonika', 'VK'
-LINK_YOUTUBE, TEXT_YOUTUBE  = 'https://www.youtube.com/channel/UC8Q99tRVe6T-zzsjBI89RWQ/videos','Youtube'
+LINK_YOUTUBE, TEXT_YOUTUBE = 'https://www.youtube.com/channel/UC8Q99tRVe6T-zzsjBI89RWQ/videos', 'Youtube'
 LINK_TG, TEXT_TG = 'https://t.me/kvantoriumperm', 'Telegram'
 
 
@@ -119,6 +121,7 @@ async def record_cmd(message: Message):
             reply_markup=keyboard_record
         )
 
+
 async def paid_courses_cmd(message: Message):
     """Отправляет сообщение о платных курсах."""
     await message.answer(
@@ -126,6 +129,8 @@ async def paid_courses_cmd(message: Message):
 выберите пожалуйста действие на клавиатуре.""",
         reply_markup=keyboard_paid_courses
     )
+
+
 async def handler_command(message: Message, state: FSMContext):
     """Обрабатывает команды и пересылает сообщения пользователям и администратору."""
     if message.reply_to_message is not None:
@@ -155,4 +160,8 @@ async def handler_command(message: Message, state: FSMContext):
     elif message.text.lower() == "выдача сертификатов":
         await get_certificates_cmd(message, state)
     else:
-        await message.answer("Неизвестная команда. Пожалуйста, попробуйте снова.")
+        current_state = await state.get_state()  # Проверяем, находится ли пользователь в состоянии ожидания имени
+        if current_state == CertificateStates.waiting_for_name.state:
+            await process_name(message, state)
+        else:
+            await message.answer("Неизвестная команда. Пожалуйста, попробуйте снова.")

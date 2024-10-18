@@ -6,12 +6,14 @@ from aiogram import types
 from keyboard import keyboard_paid_courses
 from states import CertificateStates
 
+
 def authorize_google_sheets():
     """Функция для авторизации в Google Sheets."""
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("test2-438807-eb153fcc37ff.json", scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name("crenditails.json", scope)
     client = gspread.authorize(creds)
     return client
+
 
 def find_data(sheet, search_value):
     """Функция для поиска данных в таблице."""
@@ -20,6 +22,8 @@ def find_data(sheet, search_value):
         if search_value in row.values():
             return row
     return None
+
+
 async def get_certificates_cmd(message: types.Message, state: FSMContext):
     """Функция для запроса ФИО у пользователя."""
     await message.answer("Пожалуйста, введите ваши ФИО для поиска сертификата:")
@@ -41,4 +45,4 @@ async def process_name(message: types.Message, state: FSMContext):
     else:
         await message.answer("Сертификат не найден.", reply_markup=keyboard_paid_courses)
 
-    await state.finish()
+    await state.clear()

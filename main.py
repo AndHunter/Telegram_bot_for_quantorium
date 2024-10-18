@@ -6,11 +6,14 @@ import logging
 ADMIN_ID = 5867884661
 BOT_TOKEN = '6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE'
 
+
 async def start_bot(bot: Bot):
     await bot.send_message(ADMIN_ID, text='Бот запущен')
 
+
 async def stop_bot(bot: Bot):
     await bot.send_message(ADMIN_ID, text='Бот остановлен')
+
 
 async def start():
     logging.basicConfig(level=logging.INFO,
@@ -34,11 +37,11 @@ async def start():
 
     # Общий обработчик сообщений
 
-
     try:
         await dp.start_polling(bot)
     finally:
         await bot.session.close()
+
 
 if __name__ == '__main__':
     asyncio.run(start())
