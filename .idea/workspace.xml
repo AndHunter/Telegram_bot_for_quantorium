@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6666e36-49ae-4650-9641-5fc05509840e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/certificat_kvantorium.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_certificat.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/certificates_cmd.py" beforeDir="false" afterPath="$PROJECT_DIR$/certificates_cmd.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/command.py" beforeDir="false" afterPath="$PROJECT_DIR$/command.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/keyboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +66,7 @@
       <recent name="C:\Users\Андрей\PycharmProjects\Telegram_bot_for_quantorium" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_.test_process_name">
+  <component name="RunManager" selected="Python.main.py">
     <configuration name="main.py" type="PythonConfigurationType" factoryName="Python">
       <module name="Telegram_Bot_fot_quantorium" />
       <option name="ENV_FILES" value="" />
