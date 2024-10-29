@@ -5,11 +5,63 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6666e36-49ae-4650-9641-5fc05509840e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/certificat_kvantorium.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/draw_certificat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db_integration.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/AUTHORS.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/INSTALLER" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/METADATA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/RECORD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/REQUESTED" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/WHEEL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/entry_points.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip-24.2.dist-info/top_level.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/build_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/build_env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/cli/index_command.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/cli/index_command.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/cli/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/cli/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/cli/progress_bars.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/cli/progress_bars.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/commands/list.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/commands/list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/commands/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/commands/search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/exceptions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/index/sources.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/index/sources.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/locations/_distutils.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/locations/_distutils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/metadata/importlib/_envs.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/metadata/importlib/_envs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/models/wheel.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/models/wheel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/network/lazy_wheel.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/network/lazy_wheel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/req/constructors.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/req/constructors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/req/req_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/req/req_file.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/resolution/resolvelib/candidates.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/resolution/resolvelib/candidates.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/resolution/resolvelib/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/resolution/resolvelib/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/utils/compatibility_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/utils/compatibility_tags.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/utils/misc.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_internal/utils/misc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/certifi/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/certifi/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/certifi/cacert.pem" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/certifi/cacert.pem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/compat.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/compat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/locators.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/locators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/markers.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/markers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/metadata.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/metadata.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/scripts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/version.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/version.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/wheel.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/distlib/wheel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/packaging/tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/packaging/tags.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/_macos.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/_macos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/_windows.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/truststore/_windows.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/_version.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/_version.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/connection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/connectionpool.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/connectionpool.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/util/retry.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/util/retry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/util/ssl_.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/urllib3/util/ssl_.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/vendor.txt" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Lib/site-packages/pip/_vendor/vendor.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/pip.exe" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/pip.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/pip3.12.exe" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/pip3.12.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/pip3.exe" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/pip3.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/certificates_cmd.py" beforeDir="false" afterPath="$PROJECT_DIR$/certificates_cmd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/command.py" beforeDir="false" afterPath="$PROJECT_DIR$/command.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,20 +99,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python tests.Python tests for test_.test_process_name.executor": "Run",
-    "Python tests.Python tests for tests.test_process_name.executor": "Run",
-    "Python.keyboard.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.main.py.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Андрей/PycharmProjects/Telegram_bot_for_quantorium",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python tests.Python tests for test_.test_process_name.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests.test_process_name.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_integration.executor&quot;: &quot;Run&quot;,
+    &quot;Python.keyboard.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.py.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Андрей/PycharmProjects/Telegram_bot_for_quantorium&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Андрей\PycharmProjects\Telegram_bot_for_quantorium" />
