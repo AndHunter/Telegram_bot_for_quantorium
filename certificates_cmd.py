@@ -79,11 +79,22 @@ async def process_name(message: types.Message, state: FSMContext):
         certificate_path = f'certificates/{user_name.replace(" ", "_")}_certificate.jpg'
 
         if not os.path.exists(certificate_path):
-            create_certificate(user_name, found_row['former group'], datetime.now().strftime("%d.%m.%Y"))
+            create_certificate(user_name, found_row['selected course'], datetime.now().strftime("%d.%m.%Y"))
 
         if os.path.exists(certificate_path):
-            await message.answer_photo(FSInputFile(certificate_path), caption="Ваш сертификат готов!",
+            await message.answer_photo(FSInputFile(certificate_path), caption="Ваш сертификат актуальной группы",
                                        reply_markup=keyboard_paid_courses)
+            if found_row['former group']:
+                create_certificate(user_name, found_row['former group'], datetime.now().strftime("%d.%m.%Y"))
+                await message.answer_photo(FSInputFile(certificate_path), caption="Ваш сертификат прошлой группы",
+                                           reply_markup=keyboard_paid_courses)
+                if found_row['former group'].endswith("2"):
+                    create_certificate(user_name, found_row['former group'][:-1] + "1",
+                                       datetime.now().strftime("%d.%m.%Y"))
+                    await message.answer_photo(FSInputFile(certificate_path),
+                                               caption="Ваш сертификат позопрошлой группы ",
+                                               reply_markup=keyboard_paid_courses)
+
             await asyncio.sleep(5)
             os.remove(certificate_path)
         else:
