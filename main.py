@@ -2,9 +2,13 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 import asyncio
 import logging
+from dotenv import load_dotenv
+import os
 
-ADMIN_ID = 5867884661
-BOT_TOKEN = '6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE'
+load_dotenv()
+
+ADMIN_ID = os.getenv("ADMIN_ID")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
 async def start_bot(bot: Bot) -> None:

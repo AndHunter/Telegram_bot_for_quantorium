@@ -1,42 +1,39 @@
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 from datetime import datetime
+from draw_certificat import create_certificate
 from keyboard import (
-    keyboard_start,
-    keyboard_help,
-    keyboard_free_courses,
-    keyboard_how_to_get,
-    quantum_keyboard,
-    keyboard_record,
-    keyboard_paid_courses
+    keyboard_start, keyboard_help, keyboard_free_courses,
+    keyboard_how_to_get, quantum_keyboard, keyboard_record,
+    keyboard_paid_courses, keyboard_admin_panel
 )
 from main import ADMIN_ID
 from certificates_cmd import get_certificates_cmd, process_name
 from aiogram.fsm.context import FSMContext
+from scripts.db_output import view_database
+from states import CertificateStates, ManualCertificateStates
+from dotenv import load_dotenv
+import os
 
-from states import CertificateStates
+load_dotenv()
 
-LINK_SITE, TEXT_SITE = 'https://kvantorium-perm.ru/', "сайте"
-LINK_VK, TEXT_VK = 'https://vk.com/kvantorium.fotonika', 'VK'
-LINK_YOUTUBE, TEXT_YOUTUBE = 'https://www.youtube.com/channel/UC8Q99tRVe6T-zzsjBI89RWQ/videos', 'Youtube'
-LINK_TG, TEXT_TG = 'https://t.me/kvantoriumperm', 'Telegram'
+LINK_SITE = os.getenv("LINK_SITE")
+TEXT_SITE = os.getenv("TEXT_SITE")
+LINK_VK = os.getenv("LINK_VK")
+TEXT_VK = os.getenv("TEXT_VK")
+LINK_YOUTUBE = os.getenv("LINK_YOUTUBE")
+TEXT_YOUTUBE = os.getenv("TEXT_YOUTUBE")
+LINK_TG = os.getenv("LINK_TG")
+TEXT_TG = os.getenv("TEXT_TG")
 
 
 async def support_cmd(message: Message) -> None:
-    """Команда поддержки, отправляет сообщение о том, что вопрос будет передан администратору.
-
-    :param message: Объект сообщения от пользователя.
-    """
-    await message.answer(
-        "Пожалуйста, напишите ваш вопрос, и администратор скоро свяжется с вами.",
-        reply_markup=keyboard_start
-    )
+    """Команда поддержки, отправляет сообщение о том, что вопрос будет передан администратору."""
+    await message.answer("Пожалуйста, напишите ваш вопрос, и администратор скоро свяжется с вами.",
+                         reply_markup=keyboard_start)
 
 
 async def forward_to_admin(message: Message) -> None:
-    """Пересылает сообщение от пользователя администратору.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Пересылает сообщение от пользователя администратору."""
     if message.text.lower() != "назад":
         await message.answer("Ваш вопрос отправлен администратору.")
         await message.bot.send_message(
@@ -48,24 +45,27 @@ async def forward_to_admin(message: Message) -> None:
 
 
 async def admin_reply(message: Message) -> None:
-    """Отправляет ответ от администратора пользователю.
-
-    :param message: Объект сообщения от администратора.
-    """
+    """Отправляет ответ от администратора пользователю."""
     if message.chat.id == ADMIN_ID:
         if message.reply_to_message is not None:
             parts = message.reply_to_message.text.split('(')
             user_id = parts[-1].split(')')[0]
             await message.bot.send_message(user_id, f"Ответ от администратора:\n{message.text}")
-        else:
-            await message.answer("Пожалуйста, ответьте на сообщение пользователя, чтобы отправить ответ.")
+    else:
+        await message.answer("Пожалуйста, ответьте на сообщение пользователя, чтобы отправить ответ.")
+
+
+async def admin_panel(message: Message) -> None:
+    """Админ панель. Отправляет БД полностью или ручная генерация сертификата"""
+    if message.chat.id == ADMIN_ID:
+        await message.answer(
+            f"Здравствуйте, {message.from_user.first_name}. Вы вошли в админ панель. Выберите действие на клавиатуре.",
+            reply_markup=keyboard_admin_panel
+        )
 
 
 async def first_cmd(message: Message) -> None:
-    """Отправляет приветственное сообщение пользователю.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Отправляет приветственное сообщение пользователю."""
     await message.answer(
         'Здравствуйте, вас приветствует помощник по учебному заведению "Кванториум Фотоника", выберите пожалуйста действие на клавиатуре.',
         reply_markup=keyboard_start
@@ -73,56 +73,39 @@ async def first_cmd(message: Message) -> None:
 
 
 async def help_cmd(message: Message) -> None:
-    """Отправляет информацию о учреждении.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Отправляет информацию о учреждении."""
     await message.answer(
-        f"""
-        Наш {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}
-
+        f"""Наш {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}
         Наш телефон: +7 (342) 214-42-69
         Наша почта: KvantoriumPerm@gmail.com
         Мы здесь: Пермь, ул.25 октября, 64/1
         Мы открыты: пн-сб, 9:00–21:00
-        Наши соцсети: {f"<a href=\"{LINK_VK}\">{TEXT_VK}</a>"} | 
-        {f"<a href=\"{LINK_YOUTUBE}\">{TEXT_YOUTUBE}</a>"} | 
+        Наши соцсети: {f"<a href=\"{LINK_VK}\">{TEXT_VK}</a>"} |
+        {f"<a href=\"{LINK_YOUTUBE}\">{TEXT_YOUTUBE}</a>"} |
         {f"<a href=\"{LINK_TG}\">{TEXT_TG}</a>"}
-        """,
-        reply_markup=keyboard_help,
+        """, reply_markup=keyboard_help,
         parse_mode="HTML"
     )
 
 
 async def free_courses_cmd(message: Message) -> None:
-    """Отправляет сообщение о бесплатных курсах.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Отправляет сообщение о бесплатных курсах."""
     await message.answer(
-        """Вы выбрали бесплатные курсы,
-        выберите пожалуйста действие на клавиатуре.""",
+        "Вы выбрали бесплатные курсы, выберите пожалуйста действие на клавиатуре.",
         reply_markup=keyboard_free_courses
     )
 
 
 async def how_to_get_cmd(message: Message) -> None:
-    """Отправляет информацию о том, как попасть на курсы.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Отправляет информацию о том, как попасть на курсы."""
     await message.answer(
-        f"Вам нужно пройти тесты для вступления, на нашем сайте {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}",
-        parse_mode="HTML",
-        reply_markup=keyboard_how_to_get
+        f"Вам нужно пройти тесты для вступления, на нашем сайте ",
+        parse_mode="HTML", reply_markup=keyboard_how_to_get
     )
 
 
 async def all_quantuams_cmd(message: Message) -> None:
-    """Отправляет сообщение о выборе квантумов.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Отправляет сообщение о выборе квантумов."""
     await message.answer(
         "Выберите квантум, о котором хотите узнать подробнее.",
         reply_markup=quantum_keyboard
@@ -130,12 +113,8 @@ async def all_quantuams_cmd(message: Message) -> None:
 
 
 async def record_cmd(message: Message) -> None:
-    """Отправляет информацию о записи на курсы.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Отправляет информацию о записи на курсы."""
     current_month = datetime.now().month
-
     if current_month in [1, 8, 9, 10]:
         await message.answer(
             "Чтобы записаться на курс, пожалуйста, заполните форму.",  # TODO получить ссылку на форму
@@ -143,29 +122,58 @@ async def record_cmd(message: Message) -> None:
         )
     else:
         await message.answer(
-            "Запись на курсы закончена, следующая начнётся в начале полугодия.",
-            reply_markup=keyboard_record
+            "Запись на курсы закончена, следующая начнётся в начале полугодия.", reply_markup=keyboard_record
         )
 
 
 async def paid_courses_cmd(message: Message) -> None:
-    """Отправляет сообщение о платных курсах.
-
-    :param message: Объект сообщения от пользователя.
-    """
+    """Отправляет сообщение о платных курсах."""
     await message.answer(
-        """Вы выбрали платные курсы,
-выберите пожалуйста действие на клавиатуре.""",
+        "Вы выбрали платные курсы, выберите пожалуйста действие на клавиатуре.",
         reply_markup=keyboard_paid_courses
     )
 
 
-async def handler_command(message: Message, state: FSMContext) -> None:
-    """Обрабатывает команды и пересылает сообщения пользователям и администратору.
+async def manual_certificate_cmd(message: Message, state: FSMContext) -> None:
+    """Начало создания сертификата. Спрашиваем имя."""
+    await message.answer("Введите ФИО участника:")
+    await state.set_state(ManualCertificateStates.waiting_for_name)
 
-    :param message: Объект сообщения от пользователя.
-    :param state: Объект состояния конечного автомата FSMContext.
-    """
+
+async def process_name_for_certificate(message: Message, state: FSMContext) -> None:
+    """Обрабатывает введенное имя, запрашивает группу."""
+    await state.update_data(name=message.text)
+    await message.answer("Введите группу участника:")
+    await state.set_state(ManualCertificateStates.waiting_for_group)
+
+
+async def process_group_for_certificate(message: Message, state: FSMContext) -> None:
+    """Обрабатывает введенную группу, запрашивает дату окончания."""
+    await state.update_data(group=message.text)
+    await message.answer("Введите дату окончания (например, 01.01.2025):")
+    await state.set_state(ManualCertificateStates.waiting_for_date)
+
+
+async def process_date_for_certificate(message: Message, state: FSMContext) -> None:
+    """Обрабатывает введенную дату окончания, создает сертификат."""
+    await state.update_data(date=message.text)
+    data = await state.get_data()
+    name, group, date = data["name"], data["group"], data["date"]
+
+    certificate_path = create_certificate(name, group, date)
+    if certificate_path:
+        await message.answer("Сертификат успешно создан.")
+        await message.answer_document(FSInputFile(certificate_path))
+    else:
+        await message.answer("Произошла ошибка при создании сертификата.")
+
+    await state.clear()
+
+
+async def handler_command(message: Message, state: FSMContext) -> None:
+    """Обрабатывает команды, пересылает сообщения и управляет генерацией сертификатов."""
+
+    # Проверяем, является ли сообщение ответом (для пересылки админу или ответа админу)
     if message.reply_to_message is not None:
         if message.chat.id == ADMIN_ID:
             await admin_reply(message)
@@ -174,10 +182,34 @@ async def handler_command(message: Message, state: FSMContext) -> None:
             await forward_to_admin(message)
             return
 
-    if message.text.lower() == "информация":
+    current_state = await state.get_state()
+
+    if current_state == ManualCertificateStates.waiting_for_name.state:
+        await process_name_for_certificate(message, state)
+        return
+
+    elif current_state == ManualCertificateStates.waiting_for_group.state:
+        await process_group_for_certificate(message, state)
+        return
+
+    elif current_state == ManualCertificateStates.waiting_for_date.state:
+        await process_date_for_certificate(message, state)
+        return
+
+    if message.text.lower() == "создать сертификат" and message.chat.id == ADMIN_ID:
+        await manual_certificate_cmd(message, state)
+
+    elif current_state == CertificateStates.waiting_for_name.state:
+        await process_name(message, state)
+
+    elif message.text.lower() == "информация":
         await help_cmd(message)
     elif message.text.lower() == "назад":
         await first_cmd(message)
+    elif message.text.lower() == "админ панель" and message.chat.id == ADMIN_ID:
+        await admin_panel(message)
+    elif message.text.lower() == "вывод бд" and message.chat.id == ADMIN_ID:
+        await view_database()
     elif message.text.lower() == "бесплатные курсы":
         await free_courses_cmd(message)
     elif message.text.lower() == "платные курсы":

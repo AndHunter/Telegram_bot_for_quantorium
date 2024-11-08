@@ -1,8 +1,8 @@
 import psycopg2
 
 
-def view_database():
-    # Подключение к базе данных
+async def view_database():
+    """Получает данные из базы данных и форматирует их для отображения."""
     conn = psycopg2.connect(
         dbname="tgbot_quantarium_db",
         user="postgres_admin",
@@ -11,23 +11,16 @@ def view_database():
     )
     cursor = conn.cursor()
 
-    # Выполнить запрос для получения всех данных из таблицы certificates
     cursor.execute("SELECT * FROM certificates;")
     rows = cursor.fetchall()
 
-    # Получение названий столбцов для более удобного отображения
     column_names = [desc[0] for desc in cursor.description]
-    print(" | ".join(column_names))
-    print("-" * 40)
+    data = " | ".join(column_names) + "\n" + "-" * 40 + "\n"
 
-    # Вывод данных построчно
     for row in rows:
-        print(" | ".join(map(str, row)))
+        data += " | ".join(map(str, row)) + "\n"
 
-    # Закрытие курсора и соединения
     cursor.close()
     conn.close()
 
-
-# Вызов функции
-view_database()
+    return data

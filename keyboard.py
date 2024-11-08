@@ -1,5 +1,5 @@
 from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, \
-    InlineKeyboardButton
+    InlineKeyboardButton, WebAppInfo
 from aiogram import Bot, Dispatcher, types
 
 # TODO доделать функционал клавиатуры
@@ -102,6 +102,18 @@ kb_paid_courses = [
 
 keyboard_paid_courses = ReplyKeyboardMarkup(
     keyboard=kb_paid_courses,
+    resize_keyboard=True,
+    input_field_placeholder="Просто нажми на кнопку"
+)
+
+# Клавиатура админ панели
+kb_admin_panel = [
+    [KeyboardButton(text="Вывод БД"), KeyboardButton(text="Генерация сертификата")],
+    [KeyboardButton(text="Назад")]
+]
+
+keyboard_admin_panel = ReplyKeyboardMarkup(
+    keyboard=kb_admin_panel,
     resize_keyboard=True,
     input_field_placeholder="Просто нажми на кнопку"
 )
