@@ -6,7 +6,6 @@ from keyboard import (
     keyboard_how_to_get, quantum_keyboard, keyboard_record,
     keyboard_paid_courses, keyboard_admin_panel
 )
-from main import ADMIN_ID
 from certificates_cmd import get_certificates_cmd, process_name
 from aiogram.fsm.context import FSMContext
 from scripts.db_output import view_database
@@ -24,6 +23,7 @@ LINK_YOUTUBE = os.getenv("LINK_YOUTUBE")
 TEXT_YOUTUBE = os.getenv("TEXT_YOUTUBE")
 LINK_TG = os.getenv("LINK_TG")
 TEXT_TG = os.getenv("TEXT_TG")
+ADMIN_ID = os.getenv("ADMIN_ID")
 
 
 async def support_cmd(message: Message) -> None:
@@ -57,7 +57,7 @@ async def admin_reply(message: Message) -> None:
 
 async def admin_panel(message: Message) -> None:
     """Админ панель. Отправляет БД полностью или ручная генерация сертификата"""
-    if message.chat.id == ADMIN_ID:
+    if message.chat.id == int(ADMIN_ID):
         await message.answer(
             f"Здравствуйте, {message.from_user.first_name}. Вы вошли в админ панель. Выберите действие на клавиатуре.",
             reply_markup=keyboard_admin_panel
@@ -175,7 +175,7 @@ async def handler_command(message: Message, state: FSMContext) -> None:
 
     # Проверяем, является ли сообщение ответом (для пересылки админу или ответа админу)
     if message.reply_to_message is not None:
-        if message.chat.id == ADMIN_ID:
+        if message.chat.id == int(ADMIN_ID):
             await admin_reply(message)
             return
         else:
@@ -196,7 +196,7 @@ async def handler_command(message: Message, state: FSMContext) -> None:
         await process_date_for_certificate(message, state)
         return
 
-    if message.text.lower() == "создать сертификат" and message.chat.id == ADMIN_ID:
+    if message.text.lower() == "генерация сертификата" and message.chat.id == int(ADMIN_ID):
         await manual_certificate_cmd(message, state)
 
     elif current_state == CertificateStates.waiting_for_name.state:
@@ -206,10 +206,15 @@ async def handler_command(message: Message, state: FSMContext) -> None:
         await help_cmd(message)
     elif message.text.lower() == "назад":
         await first_cmd(message)
-    elif message.text.lower() == "админ панель" and message.chat.id == ADMIN_ID:
+    elif message.text.lower() == "админ панель" and message.chat.id == int(ADMIN_ID):
         await admin_panel(message)
-    elif message.text.lower() == "вывод бд" and message.chat.id == ADMIN_ID:
-        await view_database()
+    elif message.text.lower() == "вывод бд" and message.chat.id == int(ADMIN_ID):
+        db_data = await view_database()
+
+        if db_data:
+            await message.answer(f"Данные из базы:\n{db_data}")
+        else:
+            await message.answer("Нет данных для отображения.")
     elif message.text.lower() == "бесплатные курсы":
         await free_courses_cmd(message)
     elif message.text.lower() == "платные курсы":
