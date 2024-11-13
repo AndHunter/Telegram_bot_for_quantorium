@@ -11,6 +11,7 @@ from aiogram.fsm.context import FSMContext
 from scripts.db_output import view_database
 from states import CertificateStates, ManualCertificateStates
 from dotenv import load_dotenv
+from logger import log
 import os
 
 load_dotenv()
@@ -30,6 +31,7 @@ async def support_cmd(message: Message) -> None:
     """Команда поддержки, отправляет сообщение о том, что вопрос будет передан администратору."""
     await message.answer("Пожалуйста, напишите ваш вопрос, и администратор скоро свяжется с вами.",
                          reply_markup=keyboard_start)
+    log(message)
 
 
 async def forward_to_admin(message: Message) -> None:
@@ -42,6 +44,7 @@ async def forward_to_admin(message: Message) -> None:
         )
     else:
         await first_cmd(message)
+    log(message)
 
 
 async def admin_reply(message: Message) -> None:
@@ -53,6 +56,7 @@ async def admin_reply(message: Message) -> None:
             await message.bot.send_message(user_id, f"Ответ от администратора:\n{message.text}")
     else:
         await message.answer("Пожалуйста, ответьте на сообщение пользователя, чтобы отправить ответ.")
+    log(message)
 
 
 async def admin_panel(message: Message) -> None:
@@ -62,6 +66,7 @@ async def admin_panel(message: Message) -> None:
             f"Здравствуйте, {message.from_user.first_name}. Вы вошли в админ панель. Выберите действие на клавиатуре.",
             reply_markup=keyboard_admin_panel
         )
+    log(message)
 
 
 async def first_cmd(message: Message) -> None:
@@ -70,6 +75,7 @@ async def first_cmd(message: Message) -> None:
         'Здравствуйте, вас приветствует помощник по учебному заведению "Кванториум Фотоника", выберите пожалуйста действие на клавиатуре.',
         reply_markup=keyboard_start
     )
+    log(message)
 
 
 async def help_cmd(message: Message) -> None:
@@ -86,6 +92,7 @@ async def help_cmd(message: Message) -> None:
         """, reply_markup=keyboard_help,
         parse_mode="HTML"
     )
+    log(message)
 
 
 async def free_courses_cmd(message: Message) -> None:
@@ -94,6 +101,7 @@ async def free_courses_cmd(message: Message) -> None:
         "Вы выбрали бесплатные курсы, выберите пожалуйста действие на клавиатуре.",
         reply_markup=keyboard_free_courses
     )
+    log(message)
 
 
 async def how_to_get_cmd(message: Message) -> None:
@@ -102,6 +110,7 @@ async def how_to_get_cmd(message: Message) -> None:
         f"Вам нужно пройти тесты для вступления, на нашем сайте ",
         parse_mode="HTML", reply_markup=keyboard_how_to_get
     )
+    log(message)
 
 
 async def all_quantuams_cmd(message: Message) -> None:
@@ -110,6 +119,7 @@ async def all_quantuams_cmd(message: Message) -> None:
         "Выберите квантум, о котором хотите узнать подробнее.",
         reply_markup=quantum_keyboard
     )
+    log(message)
 
 
 async def record_cmd(message: Message) -> None:
@@ -124,6 +134,7 @@ async def record_cmd(message: Message) -> None:
         await message.answer(
             "Запись на курсы закончена, следующая начнётся в начале полугодия.", reply_markup=keyboard_record
         )
+    log(message)
 
 
 async def paid_courses_cmd(message: Message) -> None:
@@ -132,12 +143,14 @@ async def paid_courses_cmd(message: Message) -> None:
         "Вы выбрали платные курсы, выберите пожалуйста действие на клавиатуре.",
         reply_markup=keyboard_paid_courses
     )
+    log(message)
 
 
 async def manual_certificate_cmd(message: Message, state: FSMContext) -> None:
     """Начало создания сертификата. Спрашиваем имя."""
     await message.answer("Введите ФИО участника:")
     await state.set_state(ManualCertificateStates.waiting_for_name)
+    log(message)
 
 
 async def process_name_for_certificate(message: Message, state: FSMContext) -> None:
@@ -145,6 +158,7 @@ async def process_name_for_certificate(message: Message, state: FSMContext) -> N
     await state.update_data(name=message.text)
     await message.answer("Введите группу участника:")
     await state.set_state(ManualCertificateStates.waiting_for_group)
+    log(message)
 
 
 async def process_group_for_certificate(message: Message, state: FSMContext) -> None:
@@ -152,6 +166,7 @@ async def process_group_for_certificate(message: Message, state: FSMContext) -> 
     await state.update_data(group=message.text)
     await message.answer("Введите дату окончания (например, 01.01.2025):")
     await state.set_state(ManualCertificateStates.waiting_for_date)
+    log(message)
 
 
 async def process_date_for_certificate(message: Message, state: FSMContext) -> None:
@@ -168,6 +183,7 @@ async def process_date_for_certificate(message: Message, state: FSMContext) -> N
         await message.answer("Произошла ошибка при создании сертификата.")
 
     await state.clear()
+    log(message)
 
 
 async def handler_command(message: Message, state: FSMContext) -> None:
@@ -233,3 +249,4 @@ async def handler_command(message: Message, state: FSMContext) -> None:
             await process_name(message, state)
         else:
             await message.answer("Неизвестная команда. Пожалуйста, попробуйте снова.")
+    log(message)

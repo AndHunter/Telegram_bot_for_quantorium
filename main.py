@@ -4,6 +4,7 @@ import asyncio
 import logging
 from dotenv import load_dotenv
 import os
+from logger import log
 
 load_dotenv()
 
@@ -14,19 +15,16 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 async def start_bot(bot: Bot) -> None:
     """
     Отправляет сообщение админу о запуске бота.
-
-    :param bot: Экземпляр бота Aiogram.
     """
     await bot.send_message(ADMIN_ID, text='Бот запущен')
-
+    log("Бот запущен")
 
 async def stop_bot(bot: Bot) -> None:
     """
     Отправляет сообщение админу о остановке бота.
-
-    :param bot: Экземпляр бота Aiogram.
     """
     await bot.send_message(ADMIN_ID, text='Бот остановлен')
+    log("Бот остановлен")
 
 
 async def start() -> None:
