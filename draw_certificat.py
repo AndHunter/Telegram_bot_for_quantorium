@@ -2,7 +2,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 from typing import Optional
 
-
+#TODO доделать границы отрисовки
 def create_certificate(
         name: str,
         group: str,

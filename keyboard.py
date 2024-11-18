@@ -1,6 +1,4 @@
-from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, \
-    InlineKeyboardButton, WebAppInfo
-from aiogram import Bot, Dispatcher, types
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 # TODO доделать функционал клавиатуры
 
@@ -14,7 +12,7 @@ kb_start = [
 keyboard_start = ReplyKeyboardMarkup(
     keyboard=kb_start,
     resize_keyboard=True,
-    input_field_placeholder="Просто нажми на кнопку"
+    input_field_placeholder="Выберите действие на клавиатуре"
 )
 
 # Клавиатура помощи
@@ -27,7 +25,7 @@ kb_help = [
 keyboard_help = ReplyKeyboardMarkup(
     keyboard=kb_help,
     resize_keyboard=True,
-    input_field_placeholder="Просто нажми на кнопку"
+    input_field_placeholder="Выберите действие на клавиатуре"
 )
 
 # Клавиатура бесплатных курсов
@@ -43,7 +41,7 @@ kb_free_courses = [
 keyboard_free_courses = ReplyKeyboardMarkup(
     keyboard=kb_free_courses,
     resize_keyboard=True,
-    input_field_placeholder="Просто нажми на кнопку"
+    input_field_placeholder="Выберите действие на клавиатуре"
 )
 
 # Клавиатура "Как попасть"
@@ -56,7 +54,7 @@ kb_how_to_get = [
 keyboard_how_to_get = ReplyKeyboardMarkup(
     keyboard=kb_how_to_get,
     resize_keyboard=True,
-    input_field_placeholder="Просто нажми на кнопку"
+    input_field_placeholder="Выберите действие на клавиатуре"
 )
 
 # Клавиатура записи на курс
@@ -68,7 +66,7 @@ kb_record = [
 keyboard_record = ReplyKeyboardMarkup(
     keyboard=kb_record,
     resize_keyboard=True,
-    input_field_placeholder="Просто нажми на кнопку"
+    input_field_placeholder="Выберите действие на клавиатуре"
 )
 
 # Инлайн кнопки для квантумов
@@ -103,7 +101,7 @@ kb_paid_courses = [
 keyboard_paid_courses = ReplyKeyboardMarkup(
     keyboard=kb_paid_courses,
     resize_keyboard=True,
-    input_field_placeholder="Просто нажми на кнопку"
+    input_field_placeholder="Выберите действие на клавиатуре"
 )
 
 # Клавиатура админ панели
@@ -115,5 +113,5 @@ kb_admin_panel = [
 keyboard_admin_panel = ReplyKeyboardMarkup(
     keyboard=kb_admin_panel,
     resize_keyboard=True,
-    input_field_placeholder="Просто нажми на кнопку"
+    input_field_placeholder="Выберите действие на клавиатуре"
 )

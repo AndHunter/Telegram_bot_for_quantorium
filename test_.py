@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from certificates_cmd import find_data
-
+# TODO написать тесты для новых функций
 
 @pytest.fixture
 def mock_google_sheets():

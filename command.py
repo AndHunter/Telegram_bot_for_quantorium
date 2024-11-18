@@ -107,7 +107,7 @@ async def free_courses_cmd(message: Message) -> None:
 async def how_to_get_cmd(message: Message) -> None:
     """Отправляет информацию о том, как попасть на курсы."""
     await message.answer(
-        f"Вам нужно пройти тесты для вступления, на нашем сайте ",
+        f"Вам нужно пройти тесты для вступления, на нашем сайте",  # TODO
         parse_mode="HTML", reply_markup=keyboard_how_to_get
     )
     log(message)
@@ -125,7 +125,7 @@ async def all_quantuams_cmd(message: Message) -> None:
 async def record_cmd(message: Message) -> None:
     """Отправляет информацию о записи на курсы."""
     current_month = datetime.now().month
-    if current_month in [1, 8, 9, 10]:
+    if current_month in [1, 8, 9, 10, 11]:
         await message.answer(
             "Чтобы записаться на курс, пожалуйста, заполните форму.",  # TODO получить ссылку на форму
             reply_markup=keyboard_record
@@ -164,7 +164,7 @@ async def process_name_for_certificate(message: Message, state: FSMContext) -> N
 async def process_group_for_certificate(message: Message, state: FSMContext) -> None:
     """Обрабатывает введенную группу, запрашивает дату окончания."""
     await state.update_data(group=message.text)
-    await message.answer("Введите дату окончания (например, 01.01.2025):")
+    await message.answer("Введите дату окончания (например, 26.05.2024):")
     await state.set_state(ManualCertificateStates.waiting_for_date)
     log(message)
 

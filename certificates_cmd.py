@@ -1,6 +1,4 @@
-import gspread
 from typing import Optional
-import os
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 from draw_certificat import create_certificate
@@ -8,8 +6,48 @@ from keyboard import keyboard_paid_courses
 from aiogram.fsm.context import FSMContext
 from aiogram import types
 from aiogram.types import FSInputFile
-import asyncio
 from states import CertificateStates
+from dotenv import load_dotenv
+import asyncio
+import os
+import gspread
+
+load_dotenv()
+
+PAST_GROUP_INTERVAL = int(os.getenv("PAST_GROUP_INTERVAL", 6))
+# TODO доделать отсчитываение относительно даты в столбцы end date
+
+def get_relative_dates() -> list[str]:
+    """
+    Определяет даты сертификатов относительно текущей даты.
+
+    Возвращает:
+        list[str]: Список из упорядоченных дат для актуальной, прошлой и позапрошлой групп.
+    """
+    current_date = datetime.now()
+    current_year = current_date.year
+
+    may_date = datetime.strptime(f"26.05.{current_year}", "%d.%m.%Y")
+    december_date = datetime.strptime(f"26.12.{current_year}", "%d.%m.%Y")
+
+    if current_date >= december_date:
+        return [
+            december_date.strftime("%d.%m.%Y"),
+            may_date.strftime("%d.%m.%Y"),
+            f"26.12.{current_year - 1}",
+        ]
+    elif current_date >= may_date:
+        return [
+            may_date.strftime("%d.%m.%Y"),
+            f"26.12.{current_year - 1}",
+            f"26.05.{current_year - 1}",
+        ]
+    else:
+        return [
+            f"26.12.{current_year - 1}",
+            f"26.05.{current_year - 1}",
+            f"26.12.{current_year - 2}",
+        ]
 
 
 def authorize_google_sheets() -> gspread.client.Client:
@@ -60,40 +98,51 @@ async def get_certificates_cmd(message: types.Message, state: FSMContext):
 
 async def process_name(message: types.Message, state: FSMContext):
     """
-        Обрабатывает введенное пользователем ФИО и ищет соответствующий сертификат в Google Sheets.
+    Обрабатывает введенное пользователем ФИО и ищет соответствующий сертификат в Google Sheets.
 
-        Если сертификат найден, он будет создан и отправлен пользователю.
+    Если сертификат найден, он будет создан и отправлен пользователю.
 
-        Args:
-            message (types.Message): Сообщение, полученное от пользователя.
-            state (FSMContext): Контекст состояния для работы с состояниями.
+    Args:
+        message (types.Message): Сообщение, полученное от пользователя.
+        state (FSMContext): Контекст состояния для работы с состояниями.
 
-        Returns:
-            None
+    Returns:
+        None
     """
     user_name = message.text
     sheet = authorize_google_sheets().open("test").sheet1
     found_row = find_data(sheet, user_name)
 
     if found_row:
+        dates = get_relative_dates()
+
         certificate_path = f'certificates/{user_name.replace(" ", "_")}_certificate.jpg'
 
         if not os.path.exists(certificate_path):
-            create_certificate(user_name, found_row['selected course'], datetime.now().strftime("%d.%m.%Y"))
+            create_certificate(user_name, found_row['selected course'], dates[0])  # Актуальная группа
 
         if os.path.exists(certificate_path):
-            await message.answer_photo(FSInputFile(certificate_path), caption="Ваш сертификат актуальной группы",
-                                       reply_markup=keyboard_paid_courses)
+            await message.answer_photo(
+                FSInputFile(certificate_path),
+                caption=f"Ваш сертификат актуальной группы ({dates[0]})",
+                reply_markup=keyboard_paid_courses
+            )
+
             if found_row['former group']:
-                create_certificate(user_name, found_row['former group'], datetime.now().strftime("%d.%m.%Y"))
-                await message.answer_photo(FSInputFile(certificate_path), caption="Ваш сертификат прошлой группы",
-                                           reply_markup=keyboard_paid_courses)
+                create_certificate(user_name, found_row['former group'], dates[1])  # Прошлая группа
+                await message.answer_photo(
+                    FSInputFile(certificate_path),
+                    caption=f"Ваш сертификат прошлой группы ({dates[1]})",
+                    reply_markup=keyboard_paid_courses
+                )
+
                 if found_row['former group'].endswith("2"):
-                    create_certificate(user_name, found_row['former group'][:-1] + "1",
-                                       datetime.now().strftime("%d.%m.%Y"))
-                    await message.answer_photo(FSInputFile(certificate_path),
-                                               caption="Ваш сертификат позопрошлой группы ",
-                                               reply_markup=keyboard_paid_courses)
+                    create_certificate(user_name, found_row['former group'][:-1] + "1", dates[2])  # Позапрошлая группа
+                    await message.answer_photo(
+                        FSInputFile(certificate_path),
+                        caption=f"Ваш сертификат позапрошлой группы ({dates[2]})",
+                        reply_markup=keyboard_paid_courses
+                    )
 
             await asyncio.sleep(5)
             os.remove(certificate_path)

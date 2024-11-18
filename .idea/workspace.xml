@@ -5,13 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6666e36-49ae-4650-9641-5fc05509840e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/db_integration.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/123_certificate.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/command.py" beforeDir="false" afterPath="$PROJECT_DIR$/command.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/Иванов_СЕргей_Петров_certificate.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/Назад_certificate.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/Сергей_Сергеев__certificate.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates_cmd.py" beforeDir="false" afterPath="$PROJECT_DIR$/certificates_cmd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_integration.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +72,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Андрей\PycharmProjects\Telegram_bot_for_quantorium" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Андрей\PycharmProjects\Telegram_bot_for_quantorium\scripts" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main.py">
