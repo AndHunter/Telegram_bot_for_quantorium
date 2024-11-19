@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 from draw_certificat import create_certificate
@@ -14,39 +14,44 @@ import gspread
 
 load_dotenv()
 
-PAST_GROUP_INTERVAL = int(os.getenv("PAST_GROUP_INTERVAL", 6))
-# TODO доделать отсчитываение относительно даты в столбцы end date
 
-def get_relative_dates() -> list[str]:
+def get_relative_dates(end_date_str: str) -> List[str]:
     """
-    Определяет даты сертификатов относительно текущей даты.
+    Получает даты сертификатов относительно указанной даты.
+
+    Аргументы:
+        end_date_str (str): Дата из столбца 'end date' в формате "DD.MM.YY".
 
     Возвращает:
-        list[str]: Список из упорядоченных дат для актуальной, прошлой и позапрошлой групп.
+        list[str]: Список из упорядоченных дат для актуальной, прошлой и позапрошлой группы.
     """
-    current_date = datetime.now()
-    current_year = current_date.year
+    end_date = datetime.strptime(end_date_str, "%d.%m.%y")
+    end_month_day = end_date.strftime("%d.%m")
 
-    may_date = datetime.strptime(f"26.05.{current_year}", "%d.%m.%Y")
-    december_date = datetime.strptime(f"26.12.{current_year}", "%d.%m.%Y")
+    end_year = end_date.year
 
-    if current_date >= december_date:
+    # Если месяц 05 (май), то возвращаем список с май, декабрь и снова май
+    if end_month_day == "26.05":
         return [
-            december_date.strftime("%d.%m.%Y"),
-            may_date.strftime("%d.%m.%Y"),
-            f"26.12.{current_year - 1}",
+            f"{end_month_day}.{end_year}",  # 26.05.XX (основная дата)
+            f"26.12.{end_year - 1}",  # 26.12.(прошлый год)
+            f"{end_month_day}.{end_year - 1}"  # 26.05.(прошлый год)
         ]
-    elif current_date >= may_date:
+
+    # Если месяц 12 (декабрь), то возвращаем список с декабрь, май и снова декабрь
+    elif end_month_day == "26.12":
         return [
-            may_date.strftime("%d.%m.%Y"),
-            f"26.12.{current_year - 1}",
-            f"26.05.{current_year - 1}",
+            f"{end_month_day}.{end_year}",  # 26.12.XX (основная дата)
+            f"26.05.{end_year - 1}",  # 26.05.(прошлый год)
+            f"26.12.{end_year - 1}"  # 26.12.(прошлый год)
         ]
+
+    # В случае других дат (если они не 26.05 или 26.12), возвращаем стандартный порядок
     else:
         return [
-            f"26.12.{current_year - 1}",
-            f"26.05.{current_year - 1}",
-            f"26.12.{current_year - 2}",
+            f"{end_month_day}.{end_year}",  # Основная дата
+            f"26.12.{end_year - 1}",  # 26.12.XX (прошлый год)
+            f"26.05.{end_year - 1}"  # 26.05.XX (прошлый год)
         ]
 
 
@@ -75,8 +80,9 @@ def find_data(sheet: gspread.Worksheet, search_value: str) -> Optional[dict]:
            Optional[dict]: Словарь с данными найденной строки или None, если данные не найдены.
     """
     all_records = sheet.get_all_records()
+    search_value = search_value.lower()
     for row in all_records:
-        if search_value in row.values():
+        if search_value in (str(value).lower() for value in row.values()):
             return row
     return None
 
@@ -92,7 +98,7 @@ async def get_certificates_cmd(message: types.Message, state: FSMContext):
         Returns:
             None
      """
-    await message.answer("Пожалуйста, введите ваши ФИО для поиска сертификата:")
+    await message.answer("Пожалуйста, введите ФИО ребёнка для поиска сертификата:")
     await state.set_state(CertificateStates.waiting_for_name)
 
 
@@ -111,44 +117,54 @@ async def process_name(message: types.Message, state: FSMContext):
     """
     user_name = message.text
     sheet = authorize_google_sheets().open("test").sheet1
-    found_row = find_data(sheet, user_name)
+    found_row = find_data(sheet, user_name.lower())
 
-    if found_row:
-        dates = get_relative_dates()
+    if found_row and found_row.get("former group"):
+        end_date_str = found_row.get("end date")
 
+        if not end_date_str:
+            await message.answer("Дата окончания не найдена. Вы можете сделать результат вручную написав в поддержку", reply_markup=keyboard_paid_courses)
+            return
+
+        dates = get_relative_dates(end_date_str)
         certificate_path = f'certificates/{user_name.replace(" ", "_")}_certificate.jpg'
+        former_group = found_row['former group']
 
-        if not os.path.exists(certificate_path):
-            create_certificate(user_name, found_row['selected course'], dates[0])  # Актуальная группа
+        group_number = former_group[-1] if former_group[-1].isdigit() else None
 
-        if os.path.exists(certificate_path):
-            await message.answer_photo(
-                FSInputFile(certificate_path),
-                caption=f"Ваш сертификат актуальной группы ({dates[0]})",
-                reply_markup=keyboard_paid_courses
-            )
-
-            if found_row['former group']:
-                create_certificate(user_name, found_row['former group'], dates[1])  # Прошлая группа
+        if group_number == "3":
+            for i in range(3, 0, -1):
+                group = former_group[:-1] + str(i)
+                create_certificate(user_name, group, dates[3 - i])
+                if os.path.exists(certificate_path):
+                    await message.answer_photo(
+                        FSInputFile(certificate_path),
+                        caption=f"Ваш сертификат за группу {group} ({dates[3 - i]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
+                        reply_markup=keyboard_paid_courses
+                    )
+        elif group_number == "2":
+            for i in range(2, 0, -1):
+                group = former_group[:-1] + str(i)
+                create_certificate(user_name, group, dates[2 - i])
+                if os.path.exists(certificate_path):
+                    await message.answer_photo(
+                        FSInputFile(certificate_path),
+                        caption=f"Ваш сертификат за группу {group} ({dates[2 - i]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
+                        reply_markup=keyboard_paid_courses
+                    )
+        elif group_number == "1":
+            create_certificate(user_name, former_group, dates[0])
+            if os.path.exists(certificate_path):
                 await message.answer_photo(
                     FSInputFile(certificate_path),
-                    caption=f"Ваш сертификат прошлой группы ({dates[1]})",
+                    caption=f"Ваш сертификат за группу {former_group} ({dates[0]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
                     reply_markup=keyboard_paid_courses
                 )
 
-                if found_row['former group'].endswith("2"):
-                    create_certificate(user_name, found_row['former group'][:-1] + "1", dates[2])  # Позапрошлая группа
-                    await message.answer_photo(
-                        FSInputFile(certificate_path),
-                        caption=f"Ваш сертификат позапрошлой группы ({dates[2]})",
-                        reply_markup=keyboard_paid_courses
-                    )
-
-            await asyncio.sleep(5)
+        await asyncio.sleep(5)
+        if os.path.exists(certificate_path):
             os.remove(certificate_path)
-        else:
-            await message.answer("Не удалось создать сертификат.", reply_markup=keyboard_paid_courses)
     else:
-        await message.answer("Сертификат не найден.", reply_markup=keyboard_paid_courses)
+        await message.answer("Сертификат не найден. Пожалуйста проверьте коректность данных.", reply_markup=keyboard_paid_courses)
 
     await state.clear()

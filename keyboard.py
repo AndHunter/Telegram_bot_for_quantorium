@@ -31,7 +31,7 @@ keyboard_help = ReplyKeyboardMarkup(
 # Клавиатура бесплатных курсов
 kb_free_courses = [
     [
-        KeyboardButton(text="Все кванториумы"),
+        KeyboardButton(text="Все квантумы"),
         KeyboardButton(text="Как попасть"),
         KeyboardButton(text="Назад"),
         KeyboardButton(text="Поддержка")
@@ -46,7 +46,7 @@ keyboard_free_courses = ReplyKeyboardMarkup(
 
 # Клавиатура "Как попасть"
 kb_how_to_get = [
-    [KeyboardButton(text="Все кванториумы"), KeyboardButton(text="Информация")],
+    [KeyboardButton(text="Все квантумы"), KeyboardButton(text="Информация")],
     [KeyboardButton(text="Записаться на курс"), KeyboardButton(text="Назад")],
     [KeyboardButton(text="Поддержка")]
 ]
@@ -93,7 +93,7 @@ quantum_keyboard = InlineKeyboardMarkup(row_width=2, inline_keyboard=[
 
 # Клавиатура платных курсов
 kb_paid_courses = [
-    [KeyboardButton(text="Все кванториумы"), KeyboardButton(text="Записаться на курс")],
+    [KeyboardButton(text="Все квантумы"), KeyboardButton(text="Записаться на курс")],
     [KeyboardButton(text="Информация"), KeyboardButton(text="Назад")],
     [KeyboardButton(text="Поддержка")]
 ]

@@ -1,7 +1,15 @@
-import gspread
+from dotenv import load_dotenv
 from oauth2client.service_account import ServiceAccountCredentials
+import os
+import gspread
 import psycopg2
-# TODO убрать лишние D в бд
+
+load_dotenv()
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+
 
 def authorize_google_sheets():
     """
@@ -37,10 +45,10 @@ def update_database():
     try:
         # Подключение к базе данных
         conn = psycopg2.connect(
-            dbname="tgbot_quantarium_db",
-            user="postgres_admin",
-            password="postgres",
-            host="localhost"
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST
         )
         cursor = conn.cursor()
         print("Успешное подключение к базе данных.")
@@ -69,8 +77,8 @@ def update_database():
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (number) DO NOTHING;
             """, (
-            fio_parent, number, email, selected_course, choosing_a_pair, fio_child, date_of_birth, address, school,
-            class_name, shift_at_school, former_group, end_date))
+                fio_parent, number, email, selected_course, choosing_a_pair, fio_child, date_of_birth, address, school,
+                class_name, shift_at_school, former_group, end_date))
 
         conn.commit()
         print("Все записи успешно добавлены в базу данных.")

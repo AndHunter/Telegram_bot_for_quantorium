@@ -25,12 +25,15 @@ TEXT_YOUTUBE = os.getenv("TEXT_YOUTUBE")
 LINK_TG = os.getenv("LINK_TG")
 TEXT_TG = os.getenv("TEXT_TG")
 ADMIN_ID = os.getenv("ADMIN_ID")
+LINK_SIT = os.getenv("LINK_SIT")
+TEXT_SIT = os.getenv("TEXT_SIT")
 
 
 async def support_cmd(message: Message) -> None:
     """Команда поддержки, отправляет сообщение о том, что вопрос будет передан администратору."""
-    await message.answer("Пожалуйста, напишите ваш вопрос, и администратор скоро свяжется с вами.",
-                         reply_markup=keyboard_start)
+    await message.answer(
+        "Пожалуйста, напишите ваш вопрос, и отправьте ответом на это сообщение. Администратор скоро свяжется с вами.",
+        reply_markup=keyboard_start)
     log(message)
 
 
@@ -53,7 +56,8 @@ async def admin_reply(message: Message) -> None:
         if message.reply_to_message is not None:
             parts = message.reply_to_message.text.split('(')
             user_id = parts[-1].split(')')[0]
-            await message.bot.send_message(user_id, f"Ответ от администратора:\n{message.text}")
+            await message.bot.send_message(user_id,
+                                           f"Ответ от администратора:\n{message.text}\n Если возникли ещё какие-то вопросы отправьте ответом на это сообщение. Администратор скоро свяжется с вами. ")
     else:
         await message.answer("Пожалуйста, ответьте на сообщение пользователя, чтобы отправить ответ.")
     log(message)
@@ -107,7 +111,7 @@ async def free_courses_cmd(message: Message) -> None:
 async def how_to_get_cmd(message: Message) -> None:
     """Отправляет информацию о том, как попасть на курсы."""
     await message.answer(
-        f"Вам нужно пройти тесты для вступления, на нашем сайте",  # TODO
+        f"Вам нужно пройти тесты для вступления, на нашем {f"<a href=\"{LINK_SIT}\">{TEXT_SIT}</a>"}",
         parse_mode="HTML", reply_markup=keyboard_how_to_get
     )
     log(message)
@@ -127,7 +131,7 @@ async def record_cmd(message: Message) -> None:
     current_month = datetime.now().month
     if current_month in [1, 8, 9, 10, 11]:
         await message.answer(
-            "Чтобы записаться на курс, пожалуйста, заполните форму.",  # TODO получить ссылку на форму
+            "Чтобы записаться на курс, пожалуйста, заполните форму.",  # TODO сылку на форму
             reply_markup=keyboard_record
         )
     else:
@@ -200,15 +204,15 @@ async def handler_command(message: Message, state: FSMContext) -> None:
 
     current_state = await state.get_state()
 
-    if current_state == ManualCertificateStates.waiting_for_name.state:
+    if current_state == ManualCertificateStates.waiting_for_name.state and message.chat.id == int(ADMIN_ID):
         await process_name_for_certificate(message, state)
         return
 
-    elif current_state == ManualCertificateStates.waiting_for_group.state:
+    elif current_state == ManualCertificateStates.waiting_for_group.state and message.chat.id == int(ADMIN_ID):
         await process_group_for_certificate(message, state)
         return
 
-    elif current_state == ManualCertificateStates.waiting_for_date.state:
+    elif current_state == ManualCertificateStates.waiting_for_date.state and message.chat.id == int(ADMIN_ID):
         await process_date_for_certificate(message, state)
         return
 
@@ -237,7 +241,7 @@ async def handler_command(message: Message, state: FSMContext) -> None:
         await paid_courses_cmd(message)
     elif message.text.lower() == "как попасть":
         await how_to_get_cmd(message)
-    elif message.text.lower() == "все кванториумы":
+    elif message.text.lower() == "все квантумы":
         await all_quantuams_cmd(message)
     elif message.text.lower() == "записаться на курс":
         await record_cmd(message)
