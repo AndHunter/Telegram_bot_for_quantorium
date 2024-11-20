@@ -52,7 +52,7 @@ async def forward_to_admin(message: Message) -> None:
 
 async def admin_reply(message: Message) -> None:
     """Отправляет ответ от администратора пользователю."""
-    if message.chat.id == ADMIN_ID:
+    if message.chat.id == int(ADMIN_ID):
         if message.reply_to_message is not None:
             parts = message.reply_to_message.text.split('(')
             user_id = parts[-1].split(')')[0]
@@ -85,14 +85,13 @@ async def first_cmd(message: Message) -> None:
 async def help_cmd(message: Message) -> None:
     """Отправляет информацию о учреждении."""
     await message.answer(
-        f"""Наш {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}
-        Наш телефон: +7 (342) 214-42-69
-        Наша почта: KvantoriumPerm@gmail.com
-        Мы здесь: Пермь, ул.25 октября, 64/1
-        Мы открыты: пн-сб, 9:00–21:00
-        Наши соцсети: {f"<a href=\"{LINK_VK}\">{TEXT_VK}</a>"} |
-        {f"<a href=\"{LINK_YOUTUBE}\">{TEXT_YOUTUBE}</a>"} |
-        {f"<a href=\"{LINK_TG}\">{TEXT_TG}</a>"}
+        f"""
+        Наш {f"<a href=\"{LINK_SIT}\">{TEXT_SIT}</a>"}
+Наш телефон: +7 (342) 214-42-69
+Наша почта: KvantoriumPerm@gmail.com
+Мы здесь: Пермь, ул.25 октября, 64/1
+Мы открыты: пн-сб, 9:00–21:00
+Наши соцсети: {f"<a href=\"{LINK_VK}\">{TEXT_VK}</a>"} | {f"<a href=\"{LINK_YOUTUBE}\">{TEXT_YOUTUBE}</a>"} | {f"<a href=\"{LINK_TG}\">{TEXT_TG}</a>"}
         """, reply_markup=keyboard_help,
         parse_mode="HTML"
     )
@@ -111,7 +110,7 @@ async def free_courses_cmd(message: Message) -> None:
 async def how_to_get_cmd(message: Message) -> None:
     """Отправляет информацию о том, как попасть на курсы."""
     await message.answer(
-        f"Вам нужно пройти тесты для вступления, на нашем {f"<a href=\"{LINK_SIT}\">{TEXT_SIT}</a>"}",
+        f"Вам нужно пройти тесты для вступления, на нашем {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}",
         parse_mode="HTML", reply_markup=keyboard_how_to_get
     )
     log(message)

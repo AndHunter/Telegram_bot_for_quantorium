@@ -115,7 +115,8 @@ async def process_name(message: types.Message, state: FSMContext):
     Returns:
         None
     """
-    user_name = message.text
+    user_name = message.text.title()
+
     sheet = authorize_google_sheets().open("test").sheet1
     found_row = find_data(sheet, user_name.lower())
 
@@ -123,41 +124,57 @@ async def process_name(message: types.Message, state: FSMContext):
         end_date_str = found_row.get("end date")
 
         if not end_date_str:
-            await message.answer("Дата окончания не найдена. Вы можете сделать результат вручную написав в поддержку", reply_markup=keyboard_paid_courses)
+            await message.answer("Дата окончания не найдена. Вы можете сделать результат вручную написав в поддержку",
+                                 reply_markup=keyboard_paid_courses)
             return
 
         dates = get_relative_dates(end_date_str)
         certificate_path = f'certificates/{user_name.replace(" ", "_")}_certificate.jpg'
         former_group = found_row['former group']
 
-        group_number = former_group[-1] if former_group[-1].isdigit() else None
+        first_word = former_group.split()[0]
+        last_char = first_word[-1].upper()
+
+        if last_char == "Б":
+            group_number = "1"
+        elif last_char == "Д":
+            group_number = "2"
+        elif last_char == "П":
+            group_number = "3"
+        else:
+            group_number = None
 
         if group_number == "3":
-            for i in range(3, 0, -1):
-                group = former_group[:-1] + str(i)
-                create_certificate(user_name, group, dates[3 - i])
+            for i, char in enumerate(["П", "Д", "Б"]):
+                modified_first_word = first_word if char == "П" else first_word + char
+                if char == "Б":
+                    modified_first_word = first_word.replace("П", "") + char
+                group = f"{modified_first_word} {' '.join(former_group.split()[1:])}"
+                create_certificate(user_name, group, dates[i])
                 if os.path.exists(certificate_path):
                     await message.answer_photo(
                         FSInputFile(certificate_path),
-                        caption=f"Ваш сертификат за группу {group} ({dates[3 - i]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
+                        caption=f"Ваш сертификат за группу {group} ({dates[i]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
                         reply_markup=keyboard_paid_courses
                     )
         elif group_number == "2":
-            for i in range(2, 0, -1):
-                group = former_group[:-1] + str(i)
-                create_certificate(user_name, group, dates[2 - i])
+            for i, char in enumerate(["Д", "Б"]):
+                modified_first_word = first_word if char == "Д" else first_word.replace("П", "").replace("Д", "") + char
+                group = f"{modified_first_word} {' '.join(former_group.split()[1:])}"
+                create_certificate(user_name, group, dates[i])
                 if os.path.exists(certificate_path):
                     await message.answer_photo(
                         FSInputFile(certificate_path),
-                        caption=f"Ваш сертификат за группу {group} ({dates[2 - i]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
+                        caption=f"Ваш сертификат за группу {group} ({dates[i]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
                         reply_markup=keyboard_paid_courses
                     )
         elif group_number == "1":
-            create_certificate(user_name, former_group, dates[0])
+            group = former_group
+            create_certificate(user_name, group, dates[0])
             if os.path.exists(certificate_path):
                 await message.answer_photo(
                     FSInputFile(certificate_path),
-                    caption=f"Ваш сертификат за группу {former_group} ({dates[0]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
+                    caption=f"Ваш сертификат за группу {group} ({dates[0]}). Проверьте все данные на сертификате. Если возникла проблема обратитесь в поддержку!",
                     reply_markup=keyboard_paid_courses
                 )
 
@@ -165,6 +182,7 @@ async def process_name(message: types.Message, state: FSMContext):
         if os.path.exists(certificate_path):
             os.remove(certificate_path)
     else:
-        await message.answer("Сертификат не найден. Пожалуйста проверьте коректность данных.", reply_markup=keyboard_paid_courses)
+        await message.answer("Сертификат не найден. Пожалуйста проверьте корректность данных.",
+                             reply_markup=keyboard_paid_courses)
 
     await state.clear()

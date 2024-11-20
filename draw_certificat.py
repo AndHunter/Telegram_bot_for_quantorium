@@ -2,7 +2,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 from typing import Optional
 
-#TODO доделать границы отрисовки
+
 def create_certificate(
         name: str,
         group: str,
@@ -26,13 +26,13 @@ def create_certificate(
         image = Image.open(image_path)
 
         font_name = ImageFont.truetype("arial.ttf", 35)
-        font_group = ImageFont.truetype("arial.ttf", 25)
+        font_group = ImageFont.truetype("arial.ttf", 15)
         font_date = ImageFont.truetype("arial.ttf", 15)
 
         drawer = ImageDraw.Draw(image)
-        drawer.text((270, 250), name, font=font_name, fill='black')
-        drawer.text((80, 350), group, font=font_group, fill='black')
-        drawer.text((440, 600), date, font=font_date, fill='blue')
+        drawer.text((275, 250), name, font=font_name, fill='black')
+        drawer.text((100, 470), group, font=font_group, fill='black')
+        drawer.text((437, 600), date, font=font_date, fill='black')
 
         output_path = os.path.join(output_dir, f'{name.replace(" ", "_")}_certificate.jpg')
         image.save(output_path)
