@@ -107,7 +107,7 @@ keyboard_paid_courses = ReplyKeyboardMarkup(
 # Клавиатура админ панели
 kb_admin_panel = [
     [KeyboardButton(text="Вывод БД"), KeyboardButton(text="Генерация сертификата")],
-    [KeyboardButton(text="Назад")]
+    [KeyboardButton(text="Отправить юзеру"), KeyboardButton(text="Назад")]
 ]
 
 keyboard_admin_panel = ReplyKeyboardMarkup(

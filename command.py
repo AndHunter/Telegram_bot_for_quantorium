@@ -9,7 +9,7 @@ from keyboard import (
 from certificates_cmd import get_certificates_cmd, process_name
 from aiogram.fsm.context import FSMContext
 from scripts.db_output import view_database
-from states import CertificateStates, ManualCertificateStates
+from states import CertificateStates, ManualCertificateStates, SendCertificateStates
 from dotenv import load_dotenv
 from logger import log
 import os
@@ -232,6 +232,73 @@ async def process_date_for_certificate(message: Message, state: FSMContext) -> N
     log(message)
 
 
+async def start_send_certificate(message: Message, state: FSMContext) -> None:
+    """Начало процесса отправки сертификата."""
+    await message.answer("Введите ID пользователя, которому нужно отправить сертификат:")
+    await state.set_state(SendCertificateStates.waiting_for_user_id)
+    log(message)
+
+
+async def process_user_id(message: Message, state: FSMContext) -> None:
+    """Обработка ID пользователя."""
+    user_id = message.text.strip()
+    if not user_id.isdigit():
+        await message.answer("ID пользователя должен быть числом. Попробуйте снова.")
+        return
+
+    await state.update_data(user_id=int(user_id))
+    await message.answer("Теперь отправьте файл (сертификат) или фото.")
+    await state.set_state(SendCertificateStates.waiting_for_file)
+    log(message)
+
+
+async def process_file_or_photo(message: Message, state: FSMContext) -> None:
+    """Обрабатывает загрузку файла или фото от администратора и отправляет его обратно пользователю."""
+    state_data = await state.get_data()
+    user_id = state_data.get("user_id")
+
+    if not user_id:
+        await message.answer("ID пользователя не найден. Начните процесс заново.")
+        await state.clear()
+        return
+
+    if message.document:
+        document = message.document
+        file_path = f"./{document.file_name}"
+
+        await message.bot.download(document, destination=file_path)
+
+        file = FSInputFile(file_path)
+        try:
+            await message.bot.send_document(chat_id=user_id, document=file)
+            await message.answer(f"Файл успешно отправлен пользователю с ID {user_id}!")
+        except Exception as e:
+            await message.answer(f"Ошибка при отправке файла: {e}")
+
+    elif message.photo:
+        folder_path = './user_certificates'
+        os.makedirs(folder_path, exist_ok=True)
+
+        photo = message.photo[-1]
+        file_path = f"{folder_path}/{photo.file_id}.jpg"
+
+        await message.bot.download(photo, destination=file_path)
+
+        file = FSInputFile(file_path)
+        try:
+            await message.bot.send_photo(chat_id=user_id, photo=file)
+            await message.answer(f"Фото успешно отправлено пользователю с ID {user_id}!")
+        except Exception as e:
+            await message.answer(f"Ошибка при отправке фото: {e}")
+
+    else:
+        await message.answer("Пожалуйста, отправьте файл или фото.")
+        return
+
+    log(message)
+    await state.clear()
+
+
 async def handler_command(message: Message, state: FSMContext) -> None:
     """Обрабатывает команды, пересылает сообщения и управляет генерацией сертификатов."""
 
@@ -256,6 +323,19 @@ async def handler_command(message: Message, state: FSMContext) -> None:
 
     elif current_state == ManualCertificateStates.waiting_for_date.state and message.chat.id == int(ADMIN_ID):
         await process_date_for_certificate(message, state)
+        return
+
+    elif current_state == SendCertificateStates.waiting_for_user_id.state and message.chat.id == int(ADMIN_ID):
+        await process_user_id(message, state)
+        return
+
+
+    elif current_state == SendCertificateStates.waiting_for_file.state and message.chat.id == int(ADMIN_ID):
+        await process_file_or_photo(message, state)
+        return
+
+    if message.text.lower() == "отправить юзеру" and message.chat.id == int(ADMIN_ID):
+        await start_send_certificate(message, state)
         return
 
     if message.text.lower() == "генерация сертификата" and message.chat.id == int(ADMIN_ID):
