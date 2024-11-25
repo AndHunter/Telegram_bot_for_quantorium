@@ -51,15 +51,58 @@ async def forward_to_admin(message: Message) -> None:
 
 
 async def admin_reply(message: Message) -> None:
-    """Отправляет ответ от администратора пользователю."""
+    """Отправляет ответ от администратора пользователю, поддерживая текст, фото и файлы."""
     if message.chat.id == int(ADMIN_ID):
         if message.reply_to_message is not None:
+            # Получаем ID пользователя из исходного сообщения
             parts = message.reply_to_message.text.split('(')
             user_id = parts[-1].split(')')[0]
-            await message.bot.send_message(user_id,
-                                           f"Ответ от администратора:\n{message.text}\n Если возникли ещё какие-то вопросы отправьте ответом на это сообщение. Администратор скоро свяжется с вами. ")
+
+            if message.text:
+                await message.bot.send_message(
+                    user_id,
+                    f"Ответ от администратора:\n{message.text}\n"
+                    "Если возникли ещё какие-то вопросы, отправьте ответом на это сообщение. Администратор скоро свяжется с вами."
+                )
+            elif message.photo:
+                await message.bot.send_photo(
+                    user_id,
+                    photo=message.photo[-1].file_id,
+                    caption=message.caption or "Если возникли ещё какие-то вопросы, отправьте ответом на это сообщение. Администратор скоро свяжется с вами."
+                )
+            elif message.document:
+                await message.bot.send_document(
+                    user_id,
+                    document=message.document.file_id,
+                    caption=message.caption or "Если возникли ещё какие-то вопросы, отправьте ответом на это сообщение. Администратор скоро свяжется с вами."
+                )
+            elif message.video:
+                await message.bot.send_video(
+                    user_id,
+                    video=message.video.file_id,
+                    caption=message.caption or "Если возникли ещё какие-то вопросы, отправьте ответом на это сообщение. Администратор скоро свяжется с вами."
+                )
+            elif message.audio:
+                await message.bot.send_audio(
+                    user_id,
+                    audio=message.audio.file_id,
+                    caption=message.caption or "Если возникли ещё какие-то вопросы, отправьте ответом на это сообщение. Администратор скоро свяжется с вами."
+                )
+            elif message.voice:
+                await message.bot.send_voice(
+                    user_id,
+                    voice=message.voice.file_id,
+                    caption="Если возникли ещё какие-то вопросы, отправьте ответом на это сообщение. Администратор скоро свяжется с вами."
+                )
+            else:
+                await message.bot.send_message(
+                    user_id,
+                    "Администратор отправил сообщение в неподдерживаемом формате."
+                )
+        else:
+            await message.answer("Пожалуйста, ответьте на сообщение пользователя, чтобы отправить ответ.")
     else:
-        await message.answer("Пожалуйста, ответьте на сообщение пользователя, чтобы отправить ответ.")
+        await message.answer("Вы не являетесь администратором.")
     log(message)
 
 
