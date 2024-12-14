@@ -32,7 +32,7 @@ TEXT_SIT = os.getenv("TEXT_SIT")
 async def support_cmd(message: Message) -> None:
     """Команда поддержки, отправляет сообщение о том, что вопрос будет передан администратору."""
     await message.answer(
-        "Пожалуйста, напишите ваш вопрос, и отправьте ответом на это сообщение. Администратор скоро свяжется с вами.",
+        "📝 Напишите ваш вопрос и отправьте его в ответ на это сообщение. Мы скоро свяжемся с вами!  ",
         reply_markup=keyboard_start)
     log(message)
 
@@ -40,10 +40,10 @@ async def support_cmd(message: Message) -> None:
 async def forward_to_admin(message: Message) -> None:
     """Пересылает сообщение от пользователя администратору."""
     if message.text.lower() != "назад":
-        await message.answer("Ваш вопрос отправлен администратору.")
+        await message.answer("✅ Ваш вопрос успешно отправлен администратору.")
         await message.bot.send_message(
             ADMIN_ID,
-            f"Вопрос от @{message.from_user.username} ({message.from_user.id}):\n{message.text}"
+            f"📝 Вопрос от @{message.from_user.username} ({message.from_user.id}):\n{message.text}"
         )
     else:
         await first_cmd(message)
@@ -61,8 +61,8 @@ async def admin_reply(message: Message) -> None:
             if message.text:
                 await message.bot.send_message(
                     user_id,
-                    f"Ответ от администратора:\n{message.text}\n"
-                    "Если возникли ещё какие-то вопросы, отправьте ответом на это сообщение. Администратор скоро свяжется с вами."
+                    f"📩 Ответ от администратора:  \n{message.text}\n"
+                    "Если у вас есть дополнительные вопросы, просто отправьте их ответом на это сообщение. Мы скоро с вами свяжемся!"
                 )
             elif message.photo:
                 await message.bot.send_photo(
@@ -110,7 +110,7 @@ async def admin_panel(message: Message) -> None:
     """Админ панель. Отправляет БД полностью или ручная генерация сертификата"""
     if message.chat.id == int(ADMIN_ID):
         await message.answer(
-            f"Здравствуйте, {message.from_user.first_name}. Вы вошли в админ панель. Выберите действие на клавиатуре.",
+            f"👋 Привет, {message.from_user.first_name}!  Добро пожаловать в админ-панель. Выберите, чем мы можем помочь, используя клавиатуру ⬇️.",
             reply_markup=keyboard_admin_panel
         )
     log(message)
@@ -119,7 +119,10 @@ async def admin_panel(message: Message) -> None:
 async def first_cmd(message: Message) -> None:
     """Отправляет приветственное сообщение пользователю."""
     await message.answer(
-        'Здравствуйте, вас приветствует помощник по учебному заведению "Кванториум Фотоника", выберите пожалуйста действие на клавиатуре.',
+        """
+👋 Добро пожаловать в Кванториум!
+Выберите, чем мы можем помочь ⬇️.
+""",
         reply_markup=keyboard_start
     )
     log(message)
@@ -129,12 +132,14 @@ async def help_cmd(message: Message) -> None:
     """Отправляет информацию о учреждении."""
     await message.answer(
         f"""
-        Наш {f"<a href=\"{LINK_SIT}\">{TEXT_SIT}</a>"}
-Наш телефон: +7 (342) 214-42-69
-Наша почта: KvantoriumPerm@gmail.com
-Мы здесь: Пермь, ул.25 октября, 64/1
-Мы открыты: пн-сб, 9:00–21:00
-Наши соцсети: {f"<a href=\"{LINK_VK}\">{TEXT_VK}</a>"} | {f"<a href=\"{LINK_YOUTUBE}\">{TEXT_YOUTUBE}</a>"} | {f"<a href=\"{LINK_TG}\">{TEXT_TG}</a>"}
+    📌 Полезная информация:  
+🔗 Наш {f"<a href=\"{LINK_SIT}\">{TEXT_SIT}</a>"}  
+📞 Телефон: +7 (342) 214-42-69  
+📧 Почта: KvantoriumPerm@gmail.com  
+📍 Адрес: Пермь, ул. 25 октября, 64/1  
+🕘 Время работы: пн-сб, 9:00–21:00  
+🌐 Наши соцсети: {f"<a href=\"{LINK_VK}\">{TEXT_VK}</a>"} | {f"<a href=\"{LINK_YOUTUBE}\">{TEXT_YOUTUBE}</a>"} | {f"<a href=\"{LINK_TG}\">{TEXT_TG}</a>"}  
+🤖 Разработчики: РКП 2024  
         """, reply_markup=keyboard_help,
         parse_mode="HTML"
     )
@@ -144,7 +149,7 @@ async def help_cmd(message: Message) -> None:
 async def free_courses_cmd(message: Message) -> None:
     """Отправляет сообщение о бесплатных курсах."""
     await message.answer(
-        "Вы выбрали бесплатные курсы, выберите пожалуйста действие на клавиатуре.",
+        "🎓 Вы выбрали бесплатные курсы. Выберите действие на клавиатуре ⬇️.  ",
         reply_markup=keyboard_free_courses
     )
     log(message)
@@ -153,7 +158,7 @@ async def free_courses_cmd(message: Message) -> None:
 async def how_to_get_cmd(message: Message) -> None:
     """Отправляет информацию о том, как попасть на курсы."""
     await message.answer(
-        f"Вам нужно пройти тесты для вступления, на нашем {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}",
+        f"📝 Для вступления на курс нужно пройти тесты. Сделать это можно на нашем сайте: {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}.  ",
         parse_mode="HTML", reply_markup=keyboard_how_to_get
     )
     log(message)
@@ -162,7 +167,7 @@ async def how_to_get_cmd(message: Message) -> None:
 async def all_quantuams_cmd(message: Message) -> None:
     """Отправляет сообщение о выборе квантумов."""
     await message.answer(
-        "Выберите квантум, о котором хотите узнать подробнее.",
+        "📋 Чтобы записаться на курс, заполните, пожалуйста, форму.  ",
         reply_markup=quantum_keyboard
     )
     log(message)
@@ -171,14 +176,14 @@ async def all_quantuams_cmd(message: Message) -> None:
 async def record_cmd(message: Message) -> None:
     """Отправляет информацию о записи на курсы."""
     current_month = datetime.now().month
-    if current_month in [1, 8, 9, 10, 11]:
+    if current_month in [1, 8, 9, 12]:
         await message.answer(
             "Чтобы записаться на курс, пожалуйста, заполните форму.",  # TODO сылку на форму
             reply_markup=keyboard_record
         )
     else:
         await message.answer(
-            "Запись на курсы закончена, следующая начнётся в начале полугодия.", reply_markup=keyboard_record
+            "📅 Запись на курсы завершена, следующая начнется в начале полугодия. Подождите немного! 😊", reply_markup=keyboard_record
         )
     log(message)
 
@@ -186,7 +191,7 @@ async def record_cmd(message: Message) -> None:
 async def paid_courses_cmd(message: Message) -> None:
     """Отправляет сообщение о платных курсах."""
     await message.answer(
-        "Вы выбрали платные курсы, выберите пожалуйста действие на клавиатуре.",
+        "💳 Вы выбрали платные курсы. Выберите действие на клавиатуре ⬇️. ",
         reply_markup=keyboard_paid_courses
     )
     log(message)
@@ -194,7 +199,7 @@ async def paid_courses_cmd(message: Message) -> None:
 
 async def manual_certificate_cmd(message: Message, state: FSMContext) -> None:
     """Начало создания сертификата. Спрашиваем имя."""
-    await message.answer("Введите ФИО участника:")
+    await message.answer("📜 Введите ФИО участника для создания сертификата:")
     await state.set_state(ManualCertificateStates.waiting_for_name)
     log(message)
 
@@ -202,7 +207,7 @@ async def manual_certificate_cmd(message: Message, state: FSMContext) -> None:
 async def process_name_for_certificate(message: Message, state: FSMContext) -> None:
     """Обрабатывает введенное имя, запрашивает группу."""
     await state.update_data(name=message.text)
-    await message.answer("Введите группу участника:")
+    await message.answer("📚 Введите группу участника:")
     await state.set_state(ManualCertificateStates.waiting_for_group)
     log(message)
 
@@ -210,7 +215,7 @@ async def process_name_for_certificate(message: Message, state: FSMContext) -> N
 async def process_group_for_certificate(message: Message, state: FSMContext) -> None:
     """Обрабатывает введенную группу, запрашивает дату окончания."""
     await state.update_data(group=message.text)
-    await message.answer("Введите дату окончания (например, 26.05.2024):")
+    await message.answer("📅 Введите дату окончания курса (например, 26.05.2024):")
     await state.set_state(ManualCertificateStates.waiting_for_date)
     log(message)
 
@@ -223,10 +228,10 @@ async def process_date_for_certificate(message: Message, state: FSMContext) -> N
 
     certificate_path = create_certificate(name, group, date)
     if certificate_path:
-        await message.answer("Сертификат успешно создан.")
+        await message.answer("🎉 Сертификат успешно создан! Вот ваш сертификат: 🎓")
         await message.answer_document(FSInputFile(certificate_path))
     else:
-        await message.answer("Произошла ошибка при создании сертификата.")
+        await message.answer("❌ Произошла ошибка при создании сертификата. Пожалуйста, попробуйте снова.")
 
     await state.clear()
     log(message)
