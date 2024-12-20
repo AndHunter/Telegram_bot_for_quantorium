@@ -39,8 +39,12 @@
    ```bash
      BOT_TOKEN=your_telegram_bot_token
      ADMIN_ID=your_admin_telegram_id
-     DATABASE_URL=your_postgresql_database_url
-     GOOGLE_SHEET_ID=your_google_sheet_id
+     LINK_SITE=https://kvantorium-perm.ru/
+     TEXT_SITE=сайте
+     DB_NAME=tgbot_quantarium_db
+     DB_USER=postgres_admin
+     DB_PASSWORD=postgres
+     DB_HOST=localhost
      TOKEN=your_telegram_bot_token
      ADMIN_ID=your_admin_id
      LINK_SITE=your_site_link
@@ -51,6 +55,8 @@
      TEXT_YOUTUBE=your_youtube_text
      LINK_TG=your_tg_link
      TEXT_TG=your_tg_text
+     LINK_FORM=https://kvantorium-perm.ru/invite/uniform
+     TEXT_FORM=форму
 
 ## ⚙️ Структура проекта
 1. main.py: Запускает бота и управляет основными операциями.

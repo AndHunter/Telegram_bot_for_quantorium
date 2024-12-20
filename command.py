@@ -27,6 +27,8 @@ TEXT_TG = os.getenv("TEXT_TG")
 ADMIN_ID = os.getenv("ADMIN_ID")
 LINK_SIT = os.getenv("LINK_SIT")
 TEXT_SIT = os.getenv("TEXT_SIT")
+LINK_FORM = os.getenv("LINK_FORM")
+TEXT_FORM = os.getenv("TEXT_FORM")
 
 
 async def support_cmd(message: Message) -> None:
@@ -158,7 +160,7 @@ async def free_courses_cmd(message: Message) -> None:
 async def how_to_get_cmd(message: Message) -> None:
     """Отправляет информацию о том, как попасть на курсы."""
     await message.answer(
-        f"📝 Для вступления на курс нужно пройти тесты. Сделать это можно на нашем сайте: {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}.  ",
+        f"📝 Для вступления на курс нужно пройти тесты. Сделать это можно на нашем {f"<a href=\"{LINK_SITE}\">{TEXT_SITE}</a>"}.  ",
         parse_mode="HTML", reply_markup=keyboard_how_to_get
     )
     log(message)
@@ -167,7 +169,7 @@ async def how_to_get_cmd(message: Message) -> None:
 async def all_quantuams_cmd(message: Message) -> None:
     """Отправляет сообщение о выборе квантумов."""
     await message.answer(
-        "📋 Чтобы записаться на курс, заполните, пожалуйста, форму.  ",
+        f"📋 Чтобы записаться на курс, пожалуйста, заполните {f"<a href=\"{LINK_FORM}\">{TEXT_FORM}</a>"}.",
         reply_markup=quantum_keyboard
     )
     log(message)
@@ -178,12 +180,13 @@ async def record_cmd(message: Message) -> None:
     current_month = datetime.now().month
     if current_month in [1, 8, 9, 12]:
         await message.answer(
-            "Чтобы записаться на курс, пожалуйста, заполните форму.",  # TODO сылку на форму
-            reply_markup=keyboard_record
+            f"📋 Чтобы записаться на курс, пожалуйста, заполните {f"<a href=\"{LINK_FORM}\">{TEXT_FORM}</a>"}.",
+            reply_markup=keyboard_record, parse_mode="HTML"
         )
     else:
         await message.answer(
-            "📅 Запись на курсы завершена, следующая начнется в начале полугодия. Подождите немного! 😊", reply_markup=keyboard_record
+            "📅 Запись на курсы завершена, следующая начнется в начале полугодия. Подождите немного! 😊",
+            reply_markup=keyboard_record
         )
     log(message)
 
