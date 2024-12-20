@@ -57,7 +57,7 @@
      TEXT_TG=your_tg_text
      LINK_FORM=https://kvantorium-perm.ru/invite/uniform
      TEXT_FORM=форму
-
+2. Создадите файл crenditails.json в нём хранятся данные сервисного аккаунта
 ## ⚙️ Структура проекта
 1. main.py: Запускает бота и управляет основными операциями.
 2. keyboard.py: Определяет кнопки для взаимодействия с пользователем через клавиатуру.

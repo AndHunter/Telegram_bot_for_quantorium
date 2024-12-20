@@ -23,14 +23,47 @@ def create_certificate(
     os.makedirs(output_dir, exist_ok=True)
 
     try:
+        group_dict = {
+            "РК": "Промробоквантум",
+            "МК": "МедиаКвантум",
+            "АК": "Аэроквантум",
+            "БК": "Биоквантум",
+            "IT": "IT-Квантум",
+            "НК": "Наноквантум",
+            "Х": "Хайтек",
+            "Ф": "Фотоника",
+            "VR": "VR / AR",
+            "ПК": "Промышленный дизайн",
+            "КК": "Космоквантум"
+        }
+
+        group_name = group_dict.get(group[:2], group_dict.get(group[:1], 'Неизвестная группа'))
+
+        if group.split()[0].endswith("Б"):
+            level = "базовый уровень"
+        elif group.split()[0].endswith("ПД"):
+            level = "продвинутый уровень"
+        elif group.split()[0].endswith("П"):
+            level = "проектный уровень"
+        else:
+            level = "неизвестный уровень"
+
         image = Image.open(image_path)
 
-        font_name = ImageFont.truetype("arial.ttf", 35)
         font_group = ImageFont.truetype("arial.ttf", 15)
         font_date = ImageFont.truetype("arial.ttf", 15)
+        font_main = ImageFont.truetype("arial.ttf", 30)
 
         drawer = ImageDraw.Draw(image)
-        drawer.text((275, 250), name, font=font_name, fill='black')
+        main_text = (
+            f"Настоящим подтверждается, что\n"
+            f"{name}\n"
+            f"прошел(а) обучение по направлению\n"
+            f"{group_name}, {level}\n"
+            f"в объеме 64 часа"
+        )
+
+        drawer.multiline_text((213, 234), main_text, font=font_main, fill='black', align='center')
         drawer.text((100, 470), group, font=font_group, fill='black')
         drawer.text((437, 600), date, font=font_date, fill='black')
 

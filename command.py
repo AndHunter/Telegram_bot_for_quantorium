@@ -169,7 +169,7 @@ async def how_to_get_cmd(message: Message) -> None:
 async def all_quantuams_cmd(message: Message) -> None:
     """Отправляет сообщение о выборе квантумов."""
     await message.answer(
-        f"📋 Чтобы записаться на курс, пожалуйста, заполните {f"<a href=\"{LINK_FORM}\">{TEXT_FORM}</a>"}.",
+        f"📋 Выберите интересующий вас квантум.",
         reply_markup=quantum_keyboard
     )
     log(message)
